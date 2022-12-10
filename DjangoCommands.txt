@@ -1,0 +1,55 @@
+docker-compose run --rm app sh -c "flake8"
+docker-compose run --rm app sh -c "django-admin startproject app ."
+docker-compose up
+docker-compose run --rm app sh -c "python manage.py test"   ----> To run test	
+docker-compose run --rm app sh -c "python manage.py startapp core"
+
+docker-compose run --rm app sh -c "python manage.py wait_for_db"
+docker-compose run --rm app sh -c "python manage.py wait_for_db && flake8"
+
+docker-compose run --rm app sh -c "python manage.py makemigrations"
+docker-compose run --rm app sh -c "python manage.py wait_for_db && python manage.py migrate"
+
+
+docker-compose down
+docker volume ls
+docker volume rm recipe-app-api_dev-db-data
+
+
+
+--------------------------
+Build web page
+
+docker-compose run --rm app sh -c "python manage.py startapp calc"
+
+(i) Create urls.py inside calc folder
+from django.urls import path
+
+from . import views
+
+urlpatterns= [
+    path('',views.home,name='home')
+]
+
+ii) Create view  function in view.py
+
+ update the urls.py of the project folder in current case its app
+ path('',include('calc.urls')),
+
+
+iii)Templates
+import os
+'DIRS': [os.path.join(BASE_DIR,'templates')],
+Go to settings.py file of  project ---> Template---> DIR
+
+app\db.sqlite3
+
+
+
+Copy
+tests.pu,url.py,views.py
+
+
+For adding Image and css
+STATICFILES_DIRS=[os.path.join(BASE_DIR,'templates'),]
+Inside template you can have image and css
